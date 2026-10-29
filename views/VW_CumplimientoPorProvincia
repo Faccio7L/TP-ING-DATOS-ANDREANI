@@ -12,5 +12,5 @@ CREATE VIEW VW_CumplimientoPorProvincia
     INNER JOIN PEDIDO P ON P.IdDestino = D.IDDESTINO
     INNER JOIN ENTREGA E ON E.IdPedido = P.IdPedido
     GROUP BY D.PROVINCIA
-    ORDER BY ENTREGADO_EN_FECHA
+    
     
