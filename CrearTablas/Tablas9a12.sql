@@ -29,9 +29,11 @@ create table ENTREGA(
 	IdPedido int not null foreign key references PEDIDO(IdPedido),
 	IdDespacho int not null foreign key references DESPACHO(IdDespacho),
 	FechaEntregaReal datetime null,
+	LlegoFrio BIT,
 	EstadoEntrega varchar(20) not null default ('Pendiente') check (EstadoEntrega IN ('Pendiente', 'Entregada', 'Rechazada')),
 	constraint CK_Entrega_FechaReal check (EstadoEntrega = 'Pendiente' OR FechaEntregaReal IS NOT NULL),
 	constraint UQ_Entrega unique (IdPedido, IdDespacho)
 	)
+	
 go
 

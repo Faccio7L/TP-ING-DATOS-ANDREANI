@@ -15,7 +15,7 @@ create table PEDIDO(
 	FechaPedido datetime not null default getDate(),
 	FechaEntregaSolicitada date not null,
 	EstadoPedido varchar(20) not null default ('Registrado') Check (EstadoPedido IN ('Registrado','En preparación', 'Preparado', 'Despachado', 'Entregado', 'Rechazado', 'Cancelado')),
-	TemperaturaPedido decimal(4,1)
+
 	)
 go
 Create table DETALLEPEDIDO(
@@ -24,6 +24,7 @@ Create table DETALLEPEDIDO(
 	CantidadSolicitada int not null CHECK (CantidadSolicitada > 0),
 	PRIMARY KEY (IdPedido, IdProducto)
 	)
+
 go
 create table PREPARACION(
 	IdPreparacion int IDENTITY(1,1) PRIMARY KEY,
