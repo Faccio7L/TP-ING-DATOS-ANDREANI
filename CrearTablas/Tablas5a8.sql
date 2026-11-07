@@ -34,7 +34,8 @@ create table PREPARACION(
 	FechaPreparacion date not null default getdate(),
 	CantidadPreparada int not null check (CantidadPreparada>0),
 	constraint FK_Preparacion_Detalle foreign key (IdPedido, IdProducto)
-		references DETALLEPEDIDO(IdPedido, IdProducto)
+		references DETALLEPEDIDO(IdPedido, IdProducto),
+	CumpleFEFO Bit not null
 )
 go
 
