@@ -1,35 +1,37 @@
-USE andreani
+USE Andreani
 GO
 
 CREATE PROCEDURE sp_RegistrarPreparacion
-    @IdPedido int,
-    @IdProducto int,
-    @IdLote int,
-    @Cantidad int
+    @IdPedido INT,
+    @IdProducto INT,
+    @IdLote INT,
+    @Cantidad INT
 AS
 BEGIN
     DECLARE @Vencimiento DATE;
-    DECLARE @Bit BIT = 1; 
+    DECLARE @Bit BIT = 1;
 
     BEGIN TRY
-        SELECT @Vencimiento = FECHAVENCIMIENTO
-        FROM LOTE
-        WHERE IDLOTE = @IdLote;
+        SELECT @Vencimiento = FechaVencimiento
+        FROM Lote
+        WHERE IdLote = @IdLote;
 
-        IF EXISTS (SELECT 1
-                   FROM LOTE
-                   WHERE STOCKLOTE >= @Cantidad
-                     AND IDPRODUCTO = @IdProducto
-                     AND FECHAVENCIMIENTO < @Vencimiento
-                     AND IDLOTE != @IdLote
-                     AND ESTADO = 'DISPONIBLE')
+        IF EXISTS (
+            SELECT 1
+            FROM Lote
+            WHERE StockLote >= @Cantidad
+                AND IdProducto = @IdProducto
+                AND FechaVencimiento < @Vencimiento
+                AND IdLote != @IdLote
+                AND Estado = 'DISPONIBLE'
+        )
         BEGIN
             SET @Bit = 0;
         END
 
         BEGIN TRANSACTION
 
-            INSERT INTO PREPARACION (IdLote, IdProducto, IdPedido, FechaPreparacion, CantidadPreparada, CumpleFEFO)
+            INSERT INTO Preparacion (IdLote, IdProducto, IdPedido, FechaPreparacion, CantidadPreparada, CumpleFEFO)
             VALUES (@IdLote, @IdProducto, @IdPedido, GETDATE(), @Cantidad, @Bit);
 
         COMMIT TRANSACTION
