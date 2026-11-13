@@ -1,10 +1,10 @@
-use andreani
-go
+USE Andreani
+GO
 
-create view vw_PorcentajeIncumplimientoFEFO
-as
-select cast(
-        (select count(*) from PREPARACION where CumpleFEFO = 0) * 100.0
-        / NULLIF((select count(*) from PREPARACION), 0)
-    AS DECIMAL(5,2)) AS [Porcentaje de incumplimiento FEFO];
+CREATE VIEW vw_PorcentajeIncumplimientoFEFO
+AS
+SELECT CAST(
+        (SELECT COUNT(*) FROM Preparacion WHERE CumpleFEFO = 0) * 100.0
+        / NULLIF((SELECT COUNT(*) FROM Preparacion), 0)
+    AS DECIMAL(5,2)) AS PorcentajeIncumplimientoFEFO;
 GO
