@@ -1,4 +1,4 @@
-CREATE FUNCTION fn_Porcentaje_En_Fecha_Comprometida (
+CREATE FUNCTION fn_PorcentajeEnFechaComprometida (
     -- Función para ver el porcentaje de entregas en fecha comprometida, siempre y cuando la fecha de entrega
     -- solicitada se encuentre en el lapso planteado en los parámetros.
     @Desde DATE,
