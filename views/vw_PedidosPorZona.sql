@@ -1,11 +1,12 @@
-use andreani 
-go
+USE Andreani
+GO
 
 CREATE VIEW vw_PedidosPorZona AS
 SELECT d.Provincia,
        d.Ciudad,
        COUNT(p.IdPedido) AS CantidadPedidos
-FROM PEDIDO p
-JOIN DESTINO d ON d.IdDestino = p.IdDestino
+FROM Pedido AS p
+JOIN Destino AS d
+    ON d.IdDestino = p.IdDestino
 GROUP BY d.Provincia, d.Ciudad;
 GO
