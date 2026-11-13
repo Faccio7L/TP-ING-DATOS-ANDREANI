@@ -1,39 +1,42 @@
-use andreani
-go
-create table DESPACHO(
-	IdDespacho int IDENTITY(1,1) PRIMARY KEY,
-	IdVehiculo int not null foreign key references VEHICULO(IdVehiculo),
-	FechaSalida datetime null,
-	EstadoDespacho varchar(20) not null default ('Programado') check (EstadoDespacho IN ('Programado', 'En ruta', 'Finalizado'))
-	)
-go
-create table CAJA(
-	IdCaja int IDENTITY(1,1) PRIMARY KEY,
-	CodigoBarra varchar(50) not null unique,
-	IdDestino int not null foreign key references DESTINO(IDDESTINO),
-	IdDespacho int null foreign key references DESPACHO(IdDespacho),
-	FechaArmado datetime not null default getdate(),
-	EstadoCaja varchar(20) not null default ('Armada') check (EstadoCaja IN ('Armada', 'Despachada', 'Entregada', 'Rechazada'))
-	)
-go
-create table DETALLECAJA(
-	IdDetalleCaja int IDENTITY(1,1) PRIMARY KEY,
-	IdCaja int not null foreign key references CAJA(IdCaja),
-	IdPreparacion int not null foreign key references PREPARACION(IdPreparacion),
-	CantidadEmpacada int not null check (CantidadEmpacada > 0),
-	constraint UQ_DetalleCaja unique (IdCaja, IdPreparacion)
-	)
-go
-create table ENTREGA(
-	IdEntrega int IDENTITY(1,1) PRIMARY KEY,
-	IdPedido int not null foreign key references PEDIDO(IdPedido),
-	IdDespacho int not null foreign key references DESPACHO(IdDespacho),
-	FechaEntregaReal datetime null,
-	LlegoFrio BIT,
-	EstadoEntrega varchar(20) not null default ('Pendiente') check (EstadoEntrega IN ('Pendiente', 'Entregada', 'Rechazada')),
-	constraint CK_Entrega_FechaReal check (EstadoEntrega = 'Pendiente' OR FechaEntregaReal IS NOT NULL),
-	constraint UQ_Entrega unique (IdPedido, IdDespacho)
-	)
-	
-go
+USE Andreani
+GO
+
+CREATE TABLE Despacho (
+    IdDespacho INT IDENTITY(1,1) PRIMARY KEY,
+    IdVehiculo INT NOT NULL FOREIGN KEY REFERENCES Vehiculo (IdVehiculo),
+    FechaSalida DATETIME NULL,
+    EstadoDespacho VARCHAR(20) NOT NULL DEFAULT ('Programado') CHECK (EstadoDespacho IN ('Programado', 'En ruta', 'Finalizado'))
+)
+GO
+
+CREATE TABLE Caja (
+    IdCaja INT IDENTITY(1,1) PRIMARY KEY,
+    CodigoBarra VARCHAR(50) NOT NULL UNIQUE,
+    IdDestino INT NOT NULL FOREIGN KEY REFERENCES Destino (IdDestino),
+    IdDespacho INT NULL FOREIGN KEY REFERENCES Despacho (IdDespacho),
+    FechaArmado DATETIME NOT NULL DEFAULT GETDATE(),
+    EstadoCaja VARCHAR(20) NOT NULL DEFAULT ('Armada') CHECK (EstadoCaja IN ('Armada', 'Despachada', 'Entregada', 'Rechazada'))
+)
+GO
+
+CREATE TABLE DetalleCaja (
+    IdDetalleCaja INT IDENTITY(1,1) PRIMARY KEY,
+    IdCaja INT NOT NULL FOREIGN KEY REFERENCES Caja (IdCaja),
+    IdPreparacion INT NOT NULL FOREIGN KEY REFERENCES Preparacion (IdPreparacion),
+    CantidadEmpacada INT NOT NULL CHECK (CantidadEmpacada > 0),
+    CONSTRAINT UQ_DetalleCaja UNIQUE (IdCaja, IdPreparacion)
+)
+GO
+
+CREATE TABLE Entrega (
+    IdEntrega INT IDENTITY(1,1) PRIMARY KEY,
+    IdPedido INT NOT NULL FOREIGN KEY REFERENCES Pedido (IdPedido),
+    IdDespacho INT NOT NULL FOREIGN KEY REFERENCES Despacho (IdDespacho),
+    FechaEntregaReal DATETIME NULL,
+    LlegoFrio BIT,
+    EstadoEntrega VARCHAR(20) NOT NULL DEFAULT ('Pendiente') CHECK (EstadoEntrega IN ('Pendiente', 'Entregada', 'Rechazada')),
+    CONSTRAINT CK_Entrega_FechaReal CHECK (EstadoEntrega = 'Pendiente' OR FechaEntregaReal IS NOT NULL),
+    CONSTRAINT UQ_Entrega UNIQUE (IdPedido, IdDespacho)
+)
+GO
 
