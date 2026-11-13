@@ -1,6 +1,5 @@
 USE Andreani
 GO
-
 CREATE VIEW vw_PedidosPorCliente AS
 SELECT c.IdCliente,
        c.NombreCliente,

@@ -1,7 +1,9 @@
+USE Andreani
+GO
+
 CREATE VIEW vw_TasaDeCumplimientoPorVehiculo AS
 SELECT
-    V.IdVehiculo,
-    COUNT(P.IdPedido) AS EntregasTotales,
+    V.IdVehiculo,COUNT(P.IdPedido) AS EntregasTotales,
     (
         SELECT COUNT(V2.IdVehiculo)
         FROM Vehiculo AS V2
@@ -28,5 +30,5 @@ INNER JOIN Despacho AS D ON D.IdVehiculo = V.IdVehiculo
 INNER JOIN Entrega AS E ON E.IdDespacho = D.IdDespacho
 INNER JOIN Pedido AS P ON P.IdPedido = E.IdPedido
 WHERE E.EstadoEntrega = 'Entregada'
-GROUP BY V.IdVehiculo;
+GROUP BY V.IdVehiculo
 GO

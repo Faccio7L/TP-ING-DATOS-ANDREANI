@@ -38,7 +38,7 @@ BEGIN
     END TRY
     BEGIN CATCH
         ROLLBACK TRANSACTION
-        PRINT 'Error al registrar la preparación'
+        PRINT 'Error al registrar la preparacion'
     END CATCH
 END
 GO

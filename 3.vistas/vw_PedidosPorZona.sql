@@ -1,6 +1,5 @@
 USE Andreani
 GO
-
 CREATE VIEW vw_PedidosPorZona AS
 SELECT d.Provincia,
        d.Ciudad,

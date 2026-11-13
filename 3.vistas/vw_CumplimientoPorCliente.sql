@@ -1,6 +1,7 @@
-CREATE VIEW vw_CumplimientoPorCliente
-    -- Muestra la cantidad de entregas por cliente y las entregadas en fecha.
-AS
+USE Andreani
+GO
+
+CREATE VIEW vw_CumplimientoPorCliente AS
 SELECT
     C.NombreCliente,
     COUNT(E.IdPedido) AS PedidosTotales,
@@ -31,3 +32,4 @@ INNER JOIN Pedido AS P
 INNER JOIN Entrega AS E
     ON E.IdPedido = P.IdPedido
 GROUP BY C.NombreCliente
+GO

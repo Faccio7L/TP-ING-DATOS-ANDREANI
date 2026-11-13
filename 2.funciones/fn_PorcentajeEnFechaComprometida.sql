@@ -1,6 +1,7 @@
+USE Andreani
+GO
+
 CREATE FUNCTION fn_PorcentajeEnFechaComprometida (
-    -- Función para ver el porcentaje de entregas en fecha comprometida, siempre y cuando la fecha de entrega
-    -- solicitada se encuentre en el lapso planteado en los parámetros.
     @Desde DATE,
     @Hasta DATE
 )
@@ -17,15 +18,18 @@ BEGIN
         AND P.FechaEntregaSolicitada < @Hasta
         AND P.EstadoPedido = 'ENTREGADO'
 
+    IF @CantidadPedidos = 0
+        RETURN 0
+
     SELECT @EntregadosEnFecha = COUNT(P.IdPedido)
     FROM Pedido AS P
-    INNER JOIN Entrega AS E
-        ON E.IdPedido = P.IdPedido
+    INNER JOIN Entrega AS E ON E.IdPedido = P.IdPedido
     WHERE P.FechaEntregaSolicitada > @Desde
         AND P.FechaEntregaSolicitada < @Hasta
         AND P.EstadoPedido = 'ENTREGADO'
         AND E.FechaEntregaReal <= P.FechaEntregaSolicitada
 
-    SET @Porcentaje = @EntregadosEnFecha * 100 / @CantidadPedidos
-    RETURN ISNULL(@Porcentaje, 0)
+    SET @Porcentaje = (@EntregadosEnFecha * 100.0) / @CantidadPedidos
+    RETURN @Porcentaje
 END
+GO
