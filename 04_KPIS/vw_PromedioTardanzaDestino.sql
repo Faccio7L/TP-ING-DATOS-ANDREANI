@@ -7,7 +7,6 @@ SELECT
     d.Provincia,
     d.Ciudad,
     COUNT(e.IdEntrega) AS CantidadEntregas,
-    AVG(DATEDIFF(HOUR, p.FechaPedido, e.FechaEntregaReal)) AS PromedioHoras,
     AVG(DATEDIFF(DAY, p.FechaPedido, e.FechaEntregaReal)) AS PromedioDias
 FROM Pedido AS p
 INNER JOIN Destino AS d ON d.IdDestino = p.IdDestino
