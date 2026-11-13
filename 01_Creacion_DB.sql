@@ -1,5 +1,0 @@
-IF DB_ID('Andreani') IS NULL
-BEGIN
-    CREATE DATABASE Andreani;
-END
-GO
