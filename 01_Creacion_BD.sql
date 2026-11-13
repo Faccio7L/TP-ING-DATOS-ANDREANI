@@ -1,0 +1,2 @@
+Create DATABASE Andreani
+go
