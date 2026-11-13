@@ -14,7 +14,7 @@ GO
 -- muestra en RecibidoPor cuando la entrega quedó como 'Entregada'.
 --
 -- Uso: SELECT * FROM fn_Trazabilidad_Lote(1)
-CREATE FUNCTION fn_Trazabilidad_Lote (
+CREATE FUNCTION fn_TrazabilidadLote (
     @IdLote INT
 )
 RETURNS TABLE
