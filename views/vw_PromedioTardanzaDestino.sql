@@ -1,12 +1,19 @@
-use andreani
-go
+USE Andreani
+GO
 
-Create view vw_PromedioTardanzaDestino as
-select TP.Provincia, TP.Ciudad, avg(DiasTranscurridos) as PromedioDiasTardanza 
-from (select d.Provincia, d.Ciudad, DATEDIFF(day,p.FechaPedido, e.FechaEntregaReal) as DiasTranscurridos
-	from PEDIDO p
-	JOIN DESTINO d on d.IDDESTINO=p.IdDestino
-	JOIN ENTREGA e on p.IdPedido=e.IdPedido
-	) as TP
-group by TP.Provincia, TP.Ciudad
-go
+CREATE VIEW vw_PromedioTardanzaDestino AS
+SELECT TP.Provincia,
+       TP.Ciudad,
+       AVG(DiasTranscurridos) AS PromedioDiasTardanza
+FROM (
+    SELECT d.Provincia,
+           d.Ciudad,
+           DATEDIFF(DAY, p.FechaPedido, e.FechaEntregaReal) AS DiasTranscurridos
+    FROM Pedido AS p
+    JOIN Destino AS d
+        ON d.IdDestino = p.IdDestino
+    JOIN Entrega AS e
+        ON p.IdPedido = e.IdPedido
+) AS TP
+GROUP BY TP.Provincia, TP.Ciudad
+GO
