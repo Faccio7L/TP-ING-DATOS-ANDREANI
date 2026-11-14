@@ -13,14 +13,15 @@ SELECT(
         FROM Entrega AS e
         INNER JOIN Pedido AS p ON p.IdPedido = e.IdPedido
         WHERE e.EstadoEntrega = 'Entregada'
-            AND e.FechaEntregaReal <= p.FechaEntregaSolicitada
+            -- CAST AS DATE: se compara solo el dia, sin la hora de la entrega
+            AND CAST(e.FechaEntregaReal AS DATE) <= p.FechaEntregaSolicitada
     ) AS EntregasEnFecha,(
         (
             SELECT COUNT(e.IdEntrega)
             FROM Entrega AS e
             INNER JOIN Pedido AS p ON p.IdPedido = e.IdPedido
             WHERE e.EstadoEntrega = 'Entregada'
-                AND e.FechaEntregaReal <= p.FechaEntregaSolicitada
+                AND CAST(e.FechaEntregaReal AS DATE) <= p.FechaEntregaSolicitada
         ) * 100.0
     ) / NULLIF((SELECT COUNT(IdEntrega) FROM Entrega WHERE EstadoEntrega = 'Entregada'), 0) AS PorcentajeCumplimiento;
 GO
