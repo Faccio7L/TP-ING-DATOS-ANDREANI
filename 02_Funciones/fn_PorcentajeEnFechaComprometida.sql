@@ -14,9 +14,10 @@ BEGIN
 
     SELECT @CantidadPedidos = COUNT(P.IdPedido)
     FROM Pedido AS P
-    WHERE P.FechaEntregaSolicitada > @Desde
-        AND P.FechaEntregaSolicitada < @Hasta
-        AND P.EstadoPedido = 'ENTREGADO'
+    -- >= y <= para que el rango incluya los dias @Desde y @Hasta
+    WHERE P.FechaEntregaSolicitada >= @Desde
+        AND P.FechaEntregaSolicitada <= @Hasta
+        AND P.EstadoPedido = 'Entregado'
 
     IF @CantidadPedidos = 0
         RETURN 0
@@ -24,10 +25,11 @@ BEGIN
     SELECT @EntregadosEnFecha = COUNT(P.IdPedido)
     FROM Pedido AS P
     INNER JOIN Entrega AS E ON E.IdPedido = P.IdPedido
-    WHERE P.FechaEntregaSolicitada > @Desde
-        AND P.FechaEntregaSolicitada < @Hasta
-        AND P.EstadoPedido = 'ENTREGADO'
-        AND E.FechaEntregaReal <= P.FechaEntregaSolicitada
+    WHERE P.FechaEntregaSolicitada >= @Desde
+        AND P.FechaEntregaSolicitada <= @Hasta
+        AND P.EstadoPedido = 'Entregado'
+        -- CAST AS DATE: se compara solo el dia, sin la hora de la entrega
+        AND CAST(E.FechaEntregaReal AS DATE) <= P.FechaEntregaSolicitada
 
     SET @Porcentaje = (@EntregadosEnFecha * 100.0) / @CantidadPedidos
     RETURN @Porcentaje
