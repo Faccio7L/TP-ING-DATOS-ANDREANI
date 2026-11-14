@@ -3,7 +3,7 @@ GO
 
 CREATE PROCEDURE sp_AsignarVehiculoDespacho
     @IdPedido INT,
-    @FechaSalida DATE
+    @FechaSalida DATETIME   -- DATETIME para guardar tambien la hora de salida
 AS
 BEGIN
     DECLARE @NecesitaFrio BIT = 0
@@ -14,6 +14,25 @@ BEGIN
         IF NOT EXISTS (SELECT 1 FROM Pedido WHERE IdPedido = @IdPedido)
         BEGIN
             PRINT 'El pedido no existe.'
+            RETURN
+        END
+
+        -- Un pedido que ya tiene entrega ya fue asignado a un despacho
+        IF EXISTS (SELECT 1 FROM Entrega WHERE IdPedido = @IdPedido)
+        BEGIN
+            PRINT 'El pedido ya tiene un despacho asignado.'
+            RETURN
+        END
+
+        -- Tiene que haber al menos una caja armada para el pedido
+        IF NOT EXISTS (
+            SELECT 1
+            FROM DetalleCaja AS dc
+            JOIN Preparacion AS pp ON pp.IdPreparacion = dc.IdPreparacion
+            WHERE pp.IdPedido = @IdPedido
+        )
+        BEGIN
+            PRINT 'El pedido no tiene cajas armadas.'
             RETURN
         END
 
@@ -31,6 +50,8 @@ BEGIN
         FROM Vehiculo
         WHERE Disponible = 1
             AND (TieneRefrigeracion >= @NecesitaFrio)
+        -- Primero los vehiculos sin frio (0 antes que 1): un pedido comun no ocupa uno refrigerado
+        ORDER BY TieneRefrigeracion, IdVehiculo
 
         IF @Vehiculo IS NULL
         BEGIN
@@ -60,7 +81,9 @@ BEGIN
         PRINT 'Vehiculo y despacho asignados correctamente.'
     END TRY
     BEGIN CATCH
-        ROLLBACK TRANSACTION
+        -- Solo hace ROLLBACK si la transaccion llego a abrirse
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION
         PRINT 'Error al asignar vehiculo y despacho'
     END CATCH
 END
