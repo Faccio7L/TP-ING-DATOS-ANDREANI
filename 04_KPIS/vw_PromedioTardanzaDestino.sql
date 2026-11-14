@@ -7,7 +7,8 @@ SELECT
     d.Provincia,
     d.Ciudad,
     COUNT(e.IdEntrega) AS CantidadEntregas,
-    AVG(DATEDIFF(DAY, p.FechaPedido, e.FechaEntregaReal)) AS PromedioDias
+    -- * 1.0 para que el promedio tenga decimales (AVG de enteros trunca); el CAST deja 2 decimales
+    CAST(AVG(DATEDIFF(DAY, p.FechaPedido, e.FechaEntregaReal) * 1.0) AS DECIMAL(5,2)) AS PromedioDias
 FROM Pedido AS p
 INNER JOIN Destino AS d ON d.IdDestino = p.IdDestino
 INNER JOIN Entrega AS e ON e.IdPedido = p.IdPedido
