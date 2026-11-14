@@ -11,7 +11,8 @@ SELECT
         INNER JOIN Entrega AS E2 ON E2.IdDespacho = D2.IdDespacho
         INNER JOIN Pedido AS P2 ON P2.IdPedido = E2.IdPedido
         WHERE E2.EstadoEntrega = 'Entregada'
-            AND E2.FechaEntregaReal <= P2.FechaEntregaSolicitada
+            -- CAST AS DATE: se compara solo el dia, sin la hora de la entrega
+            AND CAST(E2.FechaEntregaReal AS DATE) <= P2.FechaEntregaSolicitada
             AND V2.IdVehiculo = V.IdVehiculo
     ) AS EntregasATiempo,
     ((
@@ -21,7 +22,7 @@ SELECT
         INNER JOIN Entrega AS E2 ON E2.IdDespacho = D2.IdDespacho
         INNER JOIN Pedido AS P2 ON P2.IdPedido = E2.IdPedido
         WHERE E2.EstadoEntrega = 'Entregada'
-            AND E2.FechaEntregaReal <= P2.FechaEntregaSolicitada
+            AND CAST(E2.FechaEntregaReal AS DATE) <= P2.FechaEntregaSolicitada
             AND V2.IdVehiculo = V.IdVehiculo
     ) * 100.0
     ) / NULLIF(COUNT(P.IdPedido), 0) AS PorcentajeCumplimiento
