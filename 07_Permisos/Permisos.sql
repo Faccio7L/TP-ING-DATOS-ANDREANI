@@ -15,3 +15,7 @@ GO
 ALTER ROLE db_datawriter ADD MEMBER EmpleadoLogisticaUser
 GO
 ALTER ROLE db_datareader ADD MEMBER EmpleadoLogisticaUser
+GO
+-- db_datareader y db_datawriter no incluyen EXECUTE: sin esto el empleado no puede correr los procedimientos
+GRANT EXECUTE TO EmpleadoLogisticaUser
+GO
