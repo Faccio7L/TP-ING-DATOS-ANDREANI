@@ -37,8 +37,10 @@ GO
 -- 4. LOTE
 CREATE TABLE Lote (
     IdLote INT IDENTITY(1,1) PRIMARY KEY,
+    -- NOT NULL: todo lote pertenece a un producto
     IdProducto INT NOT NULL FOREIGN KEY REFERENCES Producto (IdProducto),
     FechaVencimiento DATE NOT NULL,
+    -- NOT NULL: el estado no puede quedar vacio
     Estado VARCHAR(20) NOT NULL DEFAULT 'DISPONIBLE' CHECK (Estado IN ('DISPONIBLE','BLOQUEADO','VENCIDO')),
     StockLote INT NOT NULL CHECK (StockLote >= 0)
 );
