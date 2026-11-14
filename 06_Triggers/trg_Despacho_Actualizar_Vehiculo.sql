@@ -6,11 +6,11 @@ ON Despacho
 AFTER INSERT
 AS
 BEGIN
-    DECLARE @IdVehiculo INT
-    SELECT @IdVehiculo = IdVehiculo FROM inserted
-
+    -- IN (SELECT ... FROM inserted): marca los vehiculos de todos los despachos insertados
     UPDATE Vehiculo
     SET Disponible = 0
-    WHERE IdVehiculo = @IdVehiculo
+    WHERE IdVehiculo IN (SELECT IdVehiculo FROM inserted)
+
     PRINT('VEHICULO ASIGNADO COMO NO DISPONIBLE')
 END
+GO
